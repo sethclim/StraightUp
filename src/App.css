@@ -3,16 +3,31 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #21242a;
 }
 
-.App-header {
+.App-header,
+.App-footer {
   background-color: #282c34;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  font-weight: bold;
   color: white;
+
+  height: 64px;
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: 16pt;
+  font-weight: bold;
+
+  z-index: 10;
+}
+
+.App-header {
+  justify-content: space-between;
+}
+
+.App-footer {
+  justify-content: center;
 }
 
 .App-body {
@@ -21,38 +36,33 @@
   justify-content: center;
   align-items: center;
   flex: 1;
-  gap: 16px;
+}
+
+.instruction {
+  font-size: 16pt;
+  color: white;
 }
 
 .render-container {
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  align-self: stretch;
+  flex: 1;
 }
 
-.camera,
-.output-canvas {
-  /* position: absolute; */
-  border-radius: 16px;
+.webcam {
+  position: absolute;
+  background-color: #191b1e;
 }
 
 .output-canvas {
   z-index: 1;
   position: absolute;
   pointer-events: none;
-  background-color: "#f00";
-  /* transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg); */
-}
-
-.status-container {
-  border-radius: 8px;
-  padding: 8px;
 }
 
 .status-text {
-  font-size: calc(10px + 2vmin);
   color: white;
 }
