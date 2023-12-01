@@ -11,19 +11,19 @@
   background-color: #282c34;
   display: flex;
   align-items: center;
-  color: white;
 
   height: 64px;
-  padding-left: 16px;
-  padding-right: 16px;
-  font-size: 16pt;
-  font-weight: bold;
-
   z-index: 10;
 }
 
 .App-header {
   justify-content: space-between;
+
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: 16pt;
+  font-weight: bold;
+  color: white;
 }
 
 .App-footer {
@@ -36,33 +36,4 @@
   justify-content: center;
   align-items: center;
   flex: 1;
-}
-
-.instruction {
-  font-size: 16pt;
-  color: white;
-}
-
-.render-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  align-self: stretch;
-  flex: 1;
-}
-
-.webcam {
-  position: absolute;
-  background-color: #191b1e;
-}
-
-.output-canvas {
-  z-index: 1;
-  position: absolute;
-  pointer-events: none;
-}
-
-.status-text {
-  color: white;
 }

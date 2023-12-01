@@ -1,80 +1,58 @@
-import {
-  DrawingUtils,
-  Landmark,
-  NormalizedLandmark,
-  PoseLandmarker,
-} from "@mediapipe/tasks-vision";
-import { calculateDistance2D } from "./distance";
-import { poseLandmarker } from "./model";
+import { NormalizedLandmark } from "@mediapipe/tasks-vision";
 
-let lastVideoTime = -1;
+export const calculateDistance2D = (
+  A: NormalizedLandmark,
+  B: NormalizedLandmark
+) => {
+  const dx = B.x - A.x;
+  const dy = B.y - A.y;
 
-export function predictLandmarks(
-  video: HTMLVideoElement,
-  canvas: HTMLCanvasElement,
-  onPoseChangeRequired: (required: boolean) => void
-) {
-  if (!poseLandmarker) return;
+  return Math.sqrt(dx * dx + dy * dy);
+};
 
-  const { width, height } = video.getBoundingClientRect();
-  canvas.width = width;
-  canvas.height = height;
+export const calculateDistance = (
+  A: NormalizedLandmark,
+  B: NormalizedLandmark
+) => {
+  const dx = B.x - A.x;
+  const dy = B.y - A.y;
+  const dz = B.z - A.z;
 
-  let startTimeMs = performance.now();
-  if (lastVideoTime !== video.currentTime) {
-    lastVideoTime = video.currentTime;
-    poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
-      // Model is configured to only detect 1 pose at a time (i.e. 1 person)
-      const pose_1_landmarks = result.landmarks[0];
-      const pose_1_world_landmarks = result.worldLandmarks[0];
+  return Math.sqrt(dx * dx + dy * dy + dz * dz);
+};
 
-      if (!pose_1_landmarks || !pose_1_world_landmarks) return;
+export const calculateMidpoint = (
+  A: NormalizedLandmark,
+  B: NormalizedLandmark
+): NormalizedLandmark => {
+  return {
+    x: (A.x + B.x) / 2,
+    y: (A.y + B.y) / 2,
+    z: (A.z + B.z) / 2,
+  };
+};
 
-      drawLandmarks(canvas, pose_1_landmarks);
-      const changeRequired = processLandmarks(pose_1_world_landmarks);
-      onPoseChangeRequired(changeRequired);
-    });
-  }
+export function calculateAngle(
+  A: NormalizedLandmark,
+  B: NormalizedLandmark,
+  C: NormalizedLandmark
+): number {
+  const BA = { x: A.x - B.x, y: A.y - B.y };
 
-  window.requestAnimationFrame(() =>
-    predictLandmarks(video, canvas, onPoseChangeRequired)
-  );
-}
+  const BC = { x: C.x - B.x, y: C.y - B.y };
 
-function drawLandmarks(
-  canvas: HTMLCanvasElement,
-  landmarks: NormalizedLandmark[]
-) {
-  const canvasCtx = canvas.getContext("2d");
-  if (!canvasCtx) return;
+  // Calculate dot product
+  const dotProduct = BA.x * BC.x + BA.y * BC.y;
 
-  const drawingUtils = new DrawingUtils(canvasCtx);
+  // Calculate magnitudes
+  const magnitudeAB = Math.sqrt(BA.x ** 2 + BA.y ** 2);
+  const magnitudeBC = Math.sqrt(BC.x ** 2 + BC.y ** 2);
 
-  canvasCtx.save();
-  canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-  drawingUtils.drawLandmarks(landmarks);
-  drawingUtils.drawConnectors(landmarks, PoseLandmarker.POSE_CONNECTIONS);
-  canvasCtx.restore();
-}
+  const cosTheta = dotProduct / (magnitudeAB * magnitudeBC);
 
-function processLandmarks(landmarks: Landmark[]): boolean {
-  if (landmarks.length !== 33) return false;
+  const angleRadians = Math.acos(cosTheta);
 
-  const nose = landmarks[0];
-  const left_ear = landmarks[7];
-  const right_ear = landmarks[8];
-  const left_mouth = landmarks[9];
-  const right_mouth = landmarks[10];
-  const left_shoulder = landmarks[11];
-  const right_shoulder = landmarks[12];
+  const angleDegrees = (180 / Math.PI) * angleRadians;
 
-  // THIS WORKS WELL
-  const head_sideways =
-    left_ear.x < left_mouth.x || right_ear.x > right_mouth.x;
-
-  // WORKS PRETTY WELL
-  const shoulder_dist = calculateDistance2D(left_shoulder, right_shoulder);
-  const body_sideways = shoulder_dist < 0.2; // Is body sideways?
-
-  return head_sideways && body_sideways;
+  return angleDegrees;
 }

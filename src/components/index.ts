@@ -1,3 +1,4 @@
-import Webcam from "./Webcam";
+import Webcam from "./Webcam/Webcam";
+import Stopwatch from "./Stopwatch/Stopwatch";
 
-export { Webcam };
+export { Webcam, Stopwatch };

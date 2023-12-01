@@ -1,0 +1,24 @@
+.render-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  align-self: stretch;
+  flex: 1;
+}
+
+.webcam {
+  position: absolute;
+  background-color: #191b1e;
+}
+
+.output-canvas {
+  z-index: 1;
+  position: absolute;
+  pointer-events: none;
+}
+
+.label {
+  font-size: 16pt;
+  color: white;
+}

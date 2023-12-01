@@ -1,8 +1,8 @@
 import { Videocam, VideocamOff } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import React, { useState } from "react";
 import "./App.css";
-import { Webcam } from "./components";
+import { Stopwatch, Webcam } from "./components";
+import useStore from "./data/store";
 import { modelSetup } from "./utils/model";
 
 // const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -11,35 +11,23 @@ import { modelSetup } from "./utils/model";
 modelSetup();
 
 function App() {
-  const [webcamEnabled, setWebcamEnabled] = useState(false);
-  const [poseChangeRequired, setPoseChangeRequired] = useState(false);
+  const isWebcamRunning = useStore((state) => state.isWebcamRunning);
+  const toggleWebcamStatus = useStore((state) => state.toggleWebcamStatus);
 
   return (
     <div className="App">
       <header className="App-header">
         <p>StraightUp</p>
-        <IconButton
-          disableRipple
-          color="inherit"
-          onClick={() => setWebcamEnabled(!webcamEnabled)}
-        >
-          {webcamEnabled ? <VideocamOff /> : <Videocam />}
+        <IconButton disableRipple color="inherit" onClick={toggleWebcamStatus}>
+          {isWebcamRunning ? <VideocamOff /> : <Videocam />}
         </IconButton>
       </header>
       <div className="App-body">
-        <Webcam
-          webcamEnabled={webcamEnabled}
-          onPoseChangeRequired={setPoseChangeRequired}
-        />
+        <Webcam />
       </div>
-      {webcamEnabled ? (
-        <footer
-          className="App-footer"
-          style={{
-            backgroundColor: poseChangeRequired ? "#bb2124" : "#22bb33",
-          }}
-        >
-          <p>{poseChangeRequired ? "Adjust Posture" : "Acceptable Posture"}</p>
+      {isWebcamRunning ? (
+        <footer className="App-footer">
+          <Stopwatch />
         </footer>
       ) : null}
     </div>
