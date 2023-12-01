@@ -19,6 +19,7 @@ type PostureActions = {
   toggleWebcamStatus: () => void;
   updateWebcamStatus: (status: boolean) => void;
   updatePostureStatus: (status: boolean) => void;
+  startPostureTimer: () => void;
   notifyUser: () => void;
 };
 
@@ -55,6 +56,15 @@ export const createPostureSlice: StateCreator<
           set((state) => ({ postureDuration: state.postureDuration + 1 }));
         }, 100);
       }
+    },
+    startPostureTimer() {
+      // 1. Stop previous timer
+      clearInterval(postureTimer);
+
+      // 2. Run new timer updating "postureDuration"
+      postureTimer = setInterval(() => {
+        set((state) => ({ postureDuration: state.postureDuration + 1 }));
+      }, 100);
     },
     notifyUser() {
       // TODO:

@@ -4,6 +4,7 @@ import "./App.css";
 import { Stopwatch, Webcam } from "./components";
 import useStore from "./data/store";
 import { modelSetup } from "./utils/model";
+import { useEffect } from "react";
 
 // const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 // const hasGetUserMedia = () => !!navigator.mediaDevices?.getUserMedia;
@@ -13,6 +14,13 @@ modelSetup();
 function App() {
   const isWebcamRunning = useStore((state) => state.isWebcamRunning);
   const toggleWebcamStatus = useStore((state) => state.toggleWebcamStatus);
+  const startPostureTimer = useStore((state) => state.startPostureTimer);
+
+  useEffect(() => {
+    if (isWebcamRunning) {
+      startPostureTimer();
+    }
+  }, [isWebcamRunning]);
 
   return (
     <div className="App">
