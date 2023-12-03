@@ -3,7 +3,7 @@ import { StoreState } from "../store";
 
 type PostureState = {
   isWebcamRunning: boolean;
-  shouldRenderLandmakrs: boolean;
+  shouldRenderLandmarks: boolean;
   isGoodPosture: boolean;
   postureDuration: number;
   hasNotified: boolean;
@@ -11,7 +11,7 @@ type PostureState = {
 
 const initialState: PostureState = {
   isWebcamRunning: false,
-  shouldRenderLandmakrs: true,
+  shouldRenderLandmarks: true,
   isGoodPosture: true,
   postureDuration: 0,
   hasNotified: false,
@@ -24,6 +24,7 @@ type PostureActions = {
   startPostureTimer: () => void;
   notifyUser: () => void;
   requestNotificationPermission: () => void;
+  toggleShouldRenderLandmarks: () => void;
 };
 
 export type PostureSlice = PostureState & PostureActions;
@@ -41,16 +42,16 @@ export const createPostureSlice: StateCreator<
     toggleWebcamStatus() {
       const currentStatus = get().isWebcamRunning;
       set((state) => ({ isWebcamRunning: !state.isWebcamRunning }));
-    
+
       if (currentStatus) {
-        clearInterval(postureTimer); 
-        set({ postureDuration: 0 }); 
+        clearInterval(postureTimer);
+        set({ postureDuration: 0 });
       } else {
-        get().requestNotificationPermission(); 
-        get().startPostureTimer(); 
+        get().requestNotificationPermission();
+        get().startPostureTimer();
       }
     },
-    
+
     updateWebcamStatus(status) {
       set({ isWebcamRunning: status });
     },
@@ -82,26 +83,26 @@ export const createPostureSlice: StateCreator<
     notifyUser() {
       // Detect if the user is on a mobile device
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    
+
       // Get the current posture status
       const { isGoodPosture, hasNotified } = get();
-    
+
       const showNotification = () => {
-        const message = isMobile ? 
-                        "Please check your posture on your mobile device." :
-                        "Please check your posture on your desktop.";
-    
+        const message = isMobile
+          ? "Please check your posture on your mobile device."
+          : "Please check your posture on your desktop.";
+
         if (Notification.permission === "granted") {
           new Notification(message);
         } else if (Notification.permission !== "denied") {
-          Notification.requestPermission().then(permission => {
+          Notification.requestPermission().then((permission) => {
             if (permission === "granted") {
               new Notification(message);
             }
           });
         }
       };
-    
+
       if (!isGoodPosture && !hasNotified) {
         showNotification();
         set({ hasNotified: true });
@@ -115,13 +116,17 @@ export const createPostureSlice: StateCreator<
         alert("This browser does not support desktop notifications.");
         return;
       }
-      Notification.requestPermission().then(permission => {
+      Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
           console.log("Notification permission granted.");
         } else {
           console.log("Notification permission denied.");
         }
       });
-    },  
+    },
+    toggleShouldRenderLandmarks: () => {
+      set((state) => ({ shouldRenderLandmarks: !state.shouldRenderLandmarks }));
+      console.log(get().shouldRenderLandmarks);
+    },
   };
 };

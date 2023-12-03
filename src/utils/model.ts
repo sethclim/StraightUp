@@ -94,7 +94,7 @@ function renderLoop() {
       if (pose_1_landmarks) {
         evaluatePosture(pose_1_landmarks);
 
-        if (useStore.getState().shouldRenderLandmakrs) {
+        if (useStore.getState().shouldRenderLandmarks) {
           drawPosture(pose_1_landmarks);
         }
       }

@@ -1,4 +1,4 @@
-import { Videocam, VideocamOff } from "@mui/icons-material";
+import { Videocam, VideocamOff, VisibilityOff, Visibility } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import "./App.css";
 import { Stopwatch, Webcam } from "./components";
@@ -13,7 +13,9 @@ modelSetup();
 
 function App() {
   const isWebcamRunning = useStore((state) => state.isWebcamRunning);
+  const shouldRenderLandmarks = useStore((state) => state.shouldRenderLandmarks);
   const toggleWebcamStatus = useStore((state) => state.toggleWebcamStatus);
+  const toggleShouldRenderLandmarks = useStore((state) => state.toggleShouldRenderLandmarks);
   const startPostureTimer = useStore((state) => state.startPostureTimer);
 
   useEffect(() => {
@@ -26,9 +28,15 @@ function App() {
     <div className="App">
       <header className="App-header">
         <p>StraightUp</p>
-        <IconButton disableRipple color="inherit" onClick={toggleWebcamStatus}>
-          {isWebcamRunning ? <VideocamOff /> : <Videocam />}
-        </IconButton>
+
+        <div>
+          <IconButton disableRipple color="inherit" onClick={toggleWebcamStatus}>
+            {isWebcamRunning ? <VideocamOff /> : <Videocam />}
+          </IconButton>
+          <IconButton disableRipple color="inherit" onClick={toggleShouldRenderLandmarks}>
+            {shouldRenderLandmarks ? <Visibility /> : <VisibilityOff />}
+          </IconButton>
+        </div>
       </header>
       <div className="App-body">
         <Webcam />
