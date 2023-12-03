@@ -6,6 +6,7 @@ type PostureState = {
   shouldRenderLandmakrs: boolean;
   isGoodPosture: boolean;
   postureDuration: number;
+  hasNotified: boolean;
 };
 
 const initialState: PostureState = {
@@ -13,6 +14,7 @@ const initialState: PostureState = {
   shouldRenderLandmakrs: true,
   isGoodPosture: true,
   postureDuration: 0,
+  hasNotified: false,
 };
 
 type PostureActions = {
@@ -21,6 +23,7 @@ type PostureActions = {
   updatePostureStatus: (status: boolean) => void;
   startPostureTimer: () => void;
   notifyUser: () => void;
+  requestNotificationPermission: () => void;
 };
 
 export type PostureSlice = PostureState & PostureActions;
@@ -36,7 +39,12 @@ export const createPostureSlice: StateCreator<
   return {
     ...initialState,
     toggleWebcamStatus() {
+      const currentStatus = get().isWebcamRunning;
       set((state) => ({ isWebcamRunning: !state.isWebcamRunning }));
+
+    if (!currentStatus) {
+      get().requestNotificationPermission();
+    }
     },
     updateWebcamStatus(status) {
       set({ isWebcamRunning: status });
@@ -67,8 +75,20 @@ export const createPostureSlice: StateCreator<
       }, 100);
     },
     notifyUser() {
-      // TODO:
-      // Note: make sure to only send 1 notification, i.e. add a lock
+      //ToDo: Add function to notify users
     },
+    requestNotificationPermission() {
+      if (!("Notification" in window)) {
+        alert("This browser does not support desktop notifications.");
+        return;
+      }
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          console.log("Notification permission granted.");
+        } else {
+          console.log("Notification permission denied.");
+        }
+      });
+    },  
   };
 };
