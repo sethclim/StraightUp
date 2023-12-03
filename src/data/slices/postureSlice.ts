@@ -41,11 +41,16 @@ export const createPostureSlice: StateCreator<
     toggleWebcamStatus() {
       const currentStatus = get().isWebcamRunning;
       set((state) => ({ isWebcamRunning: !state.isWebcamRunning }));
-
-    if (!currentStatus) {
-      get().requestNotificationPermission();
-    }
+    
+      if (currentStatus) {
+        clearInterval(postureTimer); 
+        set({ postureDuration: 0 }); 
+      } else {
+        get().requestNotificationPermission(); 
+        get().startPostureTimer(); 
+      }
     },
+    
     updateWebcamStatus(status) {
       set({ isWebcamRunning: status });
     },
@@ -81,7 +86,6 @@ export const createPostureSlice: StateCreator<
       // Get the current posture status
       const { isGoodPosture, hasNotified } = get();
     
-      // Function to show notification
       const showNotification = () => {
         const message = isMobile ? 
                         "Please check your posture on your mobile device." :
@@ -98,13 +102,10 @@ export const createPostureSlice: StateCreator<
         }
       };
     
-      // Notify the user if the posture is bad and no notification has been sent yet
       if (!isGoodPosture && !hasNotified) {
         showNotification();
         set({ hasNotified: true });
       }
-    
-      // Reset the notification lock when posture is good again
       if (isGoodPosture && hasNotified) {
         set({ hasNotified: false });
       }
