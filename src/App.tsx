@@ -22,7 +22,7 @@ function App() {
     if (isWebcamRunning) {
       startPostureTimer();
     }
-  }, [isWebcamRunning]);
+  }, [isWebcamRunning, startPostureTimer]);
 
   return (
     <div className="App">
