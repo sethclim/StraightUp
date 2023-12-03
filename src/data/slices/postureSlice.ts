@@ -75,7 +75,39 @@ export const createPostureSlice: StateCreator<
       }, 100);
     },
     notifyUser() {
-      //ToDo: Add function to notify users
+      // Detect if the user is on a mobile device
+      const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    
+      // Get the current posture status
+      const { isGoodPosture, hasNotified } = get();
+    
+      // Function to show notification
+      const showNotification = () => {
+        const message = isMobile ? 
+                        "Please check your posture on your mobile device." :
+                        "Please check your posture on your desktop.";
+    
+        if (Notification.permission === "granted") {
+          new Notification(message);
+        } else if (Notification.permission !== "denied") {
+          Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+              new Notification(message);
+            }
+          });
+        }
+      };
+    
+      // Notify the user if the posture is bad and no notification has been sent yet
+      if (!isGoodPosture && !hasNotified) {
+        showNotification();
+        set({ hasNotified: true });
+      }
+    
+      // Reset the notification lock when posture is good again
+      if (isGoodPosture && hasNotified) {
+        set({ hasNotified: false });
+      }
     },
     requestNotificationPermission() {
       if (!("Notification" in window)) {
