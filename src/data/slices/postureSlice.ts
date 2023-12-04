@@ -86,8 +86,7 @@ export const createPostureSlice: StateCreator<
             );
             // document.querySelector("#status").textContent =
             //   "ServiceWorkerRegistrations found.";
-            registration.showNotification("Vibration Sample", {
-              body: message,
+            registration.showNotification(message, {
               icon: "../images/touch/chrome-touch-icon-192x192.png",
               vibrate: [200, 100, 200, 100, 200, 100, 200],
               tag: "vibration-sample",
@@ -102,7 +101,6 @@ export const createPostureSlice: StateCreator<
           console.log("Notification.requestPermission " + permission);
           if (permission === "granted") {
             navigator.serviceWorker.ready.then(function (registration) {
-              console.log("serviceWorker.ready");
               registration.showNotification(message, {
                 icon: "../images/touch/chrome-touch-icon-192x192.png",
                 vibrate: [200, 100, 200, 100, 200, 100, 200],
@@ -143,7 +141,6 @@ export const createPostureSlice: StateCreator<
       }
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
-          get().showNotification();
           console.log("Notification permission granted.");
         } else {
           console.log("Notification permission denied.");
