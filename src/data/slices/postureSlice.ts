@@ -121,10 +121,10 @@ export const createPostureSlice: StateCreator<
       }, 100);
     },
     notifyUser() {
-      // Detect if the user is on a mobile device
-
       // Get the current posture status
       const { isGoodPosture, hasNotified } = get();
+
+      console.log("isGoodPosture " + isGoodPosture + " " + hasNotified);
 
       if (!isGoodPosture && !hasNotified) {
         get().showNotification();
