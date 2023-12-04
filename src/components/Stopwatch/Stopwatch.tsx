@@ -3,9 +3,7 @@ import useStore from "../../data/store";
 import { formatPostureDuration } from "../../utils/format";
 import styles from "./stopwatch.module.css";
 
-interface StopwatchProps {}
-
-const Stopwatch: React.FC<StopwatchProps> = ({}) => {
+const Stopwatch = () => {
   const isGoodPosture = useStore((state) => state.isGoodPosture);
   // Measured in increments of 0.1 seconds
   const postureDuration = useStore((state) => state.postureDuration);
@@ -20,7 +18,7 @@ const Stopwatch: React.FC<StopwatchProps> = ({}) => {
     if (!isGoodPosture && postureDuration > 50) {
       notifyUser();
     }
-  },[isGoodPosture, postureDuration,notifyUser])
+  },[isGoodPosture, postureDuration, notifyUser])
 
   return (
     <div
