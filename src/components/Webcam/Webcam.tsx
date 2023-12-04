@@ -4,9 +4,9 @@ import { startLandmarkDetection } from "../../utils/model";
 import useStore from "../../data/store";
 import styles from "./webcam.module.css";
 
-interface WebcamProps {}
 
-const Webcam: React.FC<WebcamProps> = ({}) => {
+
+const Webcam = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 

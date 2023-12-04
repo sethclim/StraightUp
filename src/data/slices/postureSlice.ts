@@ -73,7 +73,8 @@ export const createPostureSlice: StateCreator<
       }
     },
     showNotification: () => {
-      const message = true
+      const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+      const message = isMobile
         ? "Please check your posture on your mobile device."
         : "Please check your posture on your desktop.";
       console.log("Notification.requestPermission " + Notification.permission);
@@ -119,7 +120,6 @@ export const createPostureSlice: StateCreator<
     },
     notifyUser() {
       // Detect if the user is on a mobile device
-      const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
       // Get the current posture status
       const { isGoodPosture, hasNotified } = get();
