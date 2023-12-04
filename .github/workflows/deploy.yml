@@ -18,11 +18,6 @@ jobs:
       matrix:
         node-version: [12.x]
 
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
-    permissions:
-      pages: write # to deploy to Pages
-      id-token: write # to verify the deployment originates from an appropriate source
-
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
@@ -53,11 +48,18 @@ jobs:
         with:
           path: ./build
   deploy:
+    needs: build
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+
     environment:
       name: github-pages
       url: ${{steps.deployment.outputs.page_url}}
+
     runs-on: ubuntu-latest
-    needs: build
     # Build the project and add .nojekyll file to supress default behaviour
     steps:
       - name: Deploy to GitHub Pages
