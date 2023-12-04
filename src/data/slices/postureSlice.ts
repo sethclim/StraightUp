@@ -75,6 +75,7 @@ export const createPostureSlice: StateCreator<
       }
     },
     showNotification: () => {
+      console.log("showNotification ");
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
       const message = isMobile
         ? "Please check your posture on your mobile device."
@@ -88,8 +89,9 @@ export const createPostureSlice: StateCreator<
             );
             // document.querySelector("#status").textContent =
             //   "ServiceWorkerRegistrations found.";
+            console.log("show show notif ");
             registration.showNotification(message, {
-              icon: "../images/touch/chrome-touch-icon-192x192.png",
+              // icon: "../images/touch/chrome-touch-icon-192x192.png",
               vibrate: [200, 100, 200, 100, 200, 100, 200],
               tag: "vibration-sample",
             });
@@ -104,7 +106,7 @@ export const createPostureSlice: StateCreator<
           if (permission === "granted") {
             navigator.serviceWorker.ready.then(function (registration) {
               registration.showNotification(message, {
-                icon: "../images/touch/chrome-touch-icon-192x192.png",
+                // icon: "../images/touch/chrome-touch-icon-192x192.png",
                 vibrate: [200, 100, 200, 100, 200, 100, 200],
                 tag: "vibration-sample",
               });
