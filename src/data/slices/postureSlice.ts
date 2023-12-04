@@ -25,6 +25,7 @@ type PostureActions = {
   notifyUser: () => void;
   requestNotificationPermission: () => void;
   toggleShouldRenderLandmarks: () => void;
+  showNotification: () => void;
 };
 
 export type PostureSlice = PostureState & PostureActions;
@@ -71,6 +72,42 @@ export const createPostureSlice: StateCreator<
         }, 100);
       }
     },
+    showNotification: () => {
+      const message = true
+        ? "Please check your posture on your mobile device."
+        : "Please check your posture on your desktop.";
+      console.log("Notification.requestPermission " + Notification.permission);
+      if (Notification.permission === "granted") {
+        navigator.serviceWorker.getRegistration().then((registration) => {
+          if (registration) {
+            console.log(
+              "Notification.registrations " + JSON.stringify(registration)
+            );
+            // document.querySelector("#status").textContent =
+            //   "ServiceWorkerRegistrations found.";
+            registration.showNotification("Vibration Sample", {
+              body: "Buzz! Buzz!",
+              icon: "../images/touch/chrome-touch-icon-192x192.png",
+              vibrate: [200, 100, 200, 100, 200, 100, 200],
+              tag: "vibration-sample",
+            });
+          }
+        });
+      } else if (Notification.permission !== "denied") {
+        // navigator.serviceWorker.register(
+        //   `${process.env.PUBLIC_URL}/service-worker.js`
+        // );
+        Notification.requestPermission().then((permission) => {
+          console.log("Notification.requestPermission " + permission);
+          if (permission === "granted") {
+            navigator.serviceWorker.ready.then(function (registration) {
+              console.log("serviceWorker.ready");
+              registration.showNotification(message);
+            });
+          }
+        });
+      }
+    },
     startPostureTimer() {
       // 1. Stop previous timer
       clearInterval(postureTimer);
@@ -87,36 +124,8 @@ export const createPostureSlice: StateCreator<
       // Get the current posture status
       const { isGoodPosture, hasNotified } = get();
 
-      const showNotification = () => {
-        const message = isMobile
-          ? "Please check your posture on your mobile device."
-          : "Please check your posture on your desktop.";
-
-        if (Notification.permission === "granted") {
-          navigator.serviceWorker.ready.then((registration) => {
-            registration.showNotification("Vibration Sample", {
-              body: "Buzz! Buzz!",
-              icon: "../images/touch/chrome-touch-icon-192x192.png",
-              vibrate: [200, 100, 200, 100, 200, 100, 200],
-              tag: "vibration-sample",
-            });
-          });
-        } else if (Notification.permission !== "denied") {
-          navigator.serviceWorker.register(
-            `${process.env.PUBLIC_URL}/service-worker.js`
-          );
-          Notification.requestPermission().then((permission) => {
-            if (permission === "granted") {
-              navigator.serviceWorker.ready.then(function (registration) {
-                registration.showNotification(message);
-              });
-            }
-          });
-        }
-      };
-
       if (!isGoodPosture && !hasNotified) {
-        showNotification();
+        get().showNotification();
         set({ hasNotified: true });
       }
       if (isGoodPosture && hasNotified) {
@@ -130,6 +139,7 @@ export const createPostureSlice: StateCreator<
       }
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
+          get().showNotification();
           console.log("Notification permission granted.");
         } else {
           console.log("Notification permission denied.");
