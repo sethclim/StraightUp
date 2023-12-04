@@ -13,7 +13,8 @@ modelSetup();
 
 function App() {
   const isWebcamRunning = useStore((state) => state.isWebcamRunning);
-  const shouldRenderLandmarks = useStore((state) => state.shouldRenderLandmarks);
+  const shouldRenderLandmarks = useStore((state) => state.shouldRenderLandmarks)
+  const showNotification = useStore((state) => state.showNotification);;
   const toggleWebcamStatus = useStore((state) => state.toggleWebcamStatus);
   const toggleShouldRenderLandmarks = useStore((state) => state.toggleShouldRenderLandmarks);
   const startPostureTimer = useStore((state) => state.startPostureTimer);
@@ -22,7 +23,8 @@ function App() {
     if (isWebcamRunning) {
       startPostureTimer();
     }
-  }, [isWebcamRunning]);
+  }, [isWebcamRunning, startPostureTimer]);
+
 
   return (
     <div className="App">
