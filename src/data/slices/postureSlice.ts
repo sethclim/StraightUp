@@ -95,9 +95,14 @@ export const createPostureSlice: StateCreator<
         if (Notification.permission === "granted") {
           new Notification(message);
         } else if (Notification.permission !== "denied") {
+          navigator.serviceWorker.register(
+            `${process.env.PUBLIC_URL}/service-worker.js`
+          );
           Notification.requestPermission().then((permission) => {
             if (permission === "granted") {
-              new Notification(message);
+              navigator.serviceWorker.ready.then(function (registration) {
+                new Notification(message);
+              });
             }
           });
         }
