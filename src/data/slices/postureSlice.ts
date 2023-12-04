@@ -93,7 +93,14 @@ export const createPostureSlice: StateCreator<
           : "Please check your posture on your desktop.";
 
         if (Notification.permission === "granted") {
-          new Notification(message);
+          navigator.serviceWorker.ready.then((registration) => {
+            registration.showNotification("Vibration Sample", {
+              body: "Buzz! Buzz!",
+              icon: "../images/touch/chrome-touch-icon-192x192.png",
+              vibrate: [200, 100, 200, 100, 200, 100, 200],
+              tag: "vibration-sample",
+            });
+          });
         } else if (Notification.permission !== "denied") {
           navigator.serviceWorker.register(
             `${process.env.PUBLIC_URL}/service-worker.js`
@@ -101,7 +108,7 @@ export const createPostureSlice: StateCreator<
           Notification.requestPermission().then((permission) => {
             if (permission === "granted") {
               navigator.serviceWorker.ready.then(function (registration) {
-                new Notification(message);
+                registration.showNotification(message);
               });
             }
           });
