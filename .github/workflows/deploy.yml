@@ -38,14 +38,14 @@ jobs:
       - name: Build
         run: |
           yarn build --force
-          touch ./dist/.nojekyll
+          touch ./build/.nojekyll
 
       - name: Push to pages repo
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
         with:
-          source-directory: "dist"
+          source-directory: "build"
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
           github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
