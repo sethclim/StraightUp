@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/StraightUp/static/css/main.a5ad4b6d.css",
+    "main.js": "/StraightUp/static/js/main.affd46c4.js",
+    "static/js/787.d221def2.chunk.js": "/StraightUp/static/js/787.d221def2.chunk.js",
+    "service-worker.js": "/StraightUp/service-worker.js",
+    "index.html": "/StraightUp/index.html",
+    "main.a5ad4b6d.css.map": "/StraightUp/static/css/main.a5ad4b6d.css.map",
+    "main.affd46c4.js.map": "/StraightUp/static/js/main.affd46c4.js.map",
+    "787.d221def2.chunk.js.map": "/StraightUp/static/js/787.d221def2.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a5ad4b6d.css",
+    "static/js/main.affd46c4.js"
+  ]
+}
