@@ -44,14 +44,10 @@ jobs:
           yarn build --force
           touch ./build/.nojekyll
 
-      - name: Push to pages repo
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
+      - name: Upload Artifacts
+        uses: actions/upload-pages-artifact@v2
         with:
-          source-directory: "build"
-          destination-github-username: ${{ github.actor }}
-          destination-repository-name: ${{ env.deployToRepo }}
-          user-email: ${{ env.githubEmail }}
-          commit-message: Deploy ORIGIN_COMMIT
-          target-branch: gh-pages
+          path: ./build
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
