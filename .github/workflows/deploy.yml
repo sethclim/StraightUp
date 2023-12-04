@@ -15,6 +15,7 @@ jobs:
         node-version: [12.x]
 
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
         uses: actions/checkout@v2
 
@@ -23,8 +24,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      # Install dependencies with npm
       - name: Install dependencies
-        run: npm install
+        run: yarn install --prefer-offline --frozen-lockfile --ignore-engines --registry https://registry.npmjs.org --network-timeout 300000
 
       # - name: Run the tests and generate coverage report
       #   run: npm test -- --coverage
@@ -32,16 +34,18 @@ jobs:
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v1
 
+      # Build the project and add .nojekyll file to supress default behaviour
       - name: Build
-        run: npm run build
-
-      - name: Deploy
         run: |
-          git config --global user.name $user_name
-          git config --global user.email $user_email
-          git remote set-url origin https://${github_token}@github.com/${repository}
-          npm run deploy
+          yarn build --force
+          touch ./dist/.nojekyll
+
+      - name: Push to pages repo
+        uses: cpina/github-action-push-to-another-repository@main
         env:
+          API_TOKEN_GITHUB: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
+        with:
+          source-directory: "dist"
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
           github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
