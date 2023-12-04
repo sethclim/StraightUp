@@ -50,7 +50,8 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
         with:
           source-directory: "build"
-          user_name: "github-actions[bot]"
-          user_email: "github-actions[bot]@users.noreply.github.com"
-          github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
-          repository: ${{ github.repository }}
+          destination-github-username: ${{ github.actor }}
+          destination-repository-name: ${{ env.deployToRepo }}
+          user-email: ${{ env.githubEmail }}
+          commit-message: Deploy ORIGIN_COMMIT
+          target-branch: gh-pages
