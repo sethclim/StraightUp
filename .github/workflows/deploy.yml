@@ -43,7 +43,6 @@ jobs:
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v1
 
-      # Build the project and add .nojekyll file to supress default behaviour
       - name: Build
         run: |
           yarn build --force
@@ -53,9 +52,16 @@ jobs:
         uses: actions/upload-pages-artifact@v2
         with:
           path: ./build
-
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{steps.deployment.outputs.page_url}}
+    runs-on: ubuntu-latest
+    needs: build
+    # Build the project and add .nojekyll file to supress default behaviour
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
-        with:
-          token: ${{ github.ACTIONS_DEPLOY_ACCESS_TOKEN }}
+        # with:
+        #   token: ${{ github.ACTIONS_DEPLOY_ACCESS_TOKEN }}
