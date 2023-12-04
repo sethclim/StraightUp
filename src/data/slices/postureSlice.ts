@@ -63,6 +63,8 @@ export const createPostureSlice: StateCreator<
         // 1. Update state
         set({ isGoodPosture: status, postureDuration: 0 });
 
+        if (status) set({ hasNotified: false });
+
         // 2. Stop previous timer
         clearInterval(postureTimer);
 
