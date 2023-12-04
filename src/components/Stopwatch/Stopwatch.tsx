@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import useStore from "../../data/store";
 import { formatPostureDuration } from "../../utils/format";
 import styles from "./stopwatch.module.css";
@@ -14,9 +15,12 @@ const Stopwatch: React.FC<StopwatchProps> = ({}) => {
   const formattedDuration = formatPostureDuration(postureDuration);
 
   // If bad posture exceeds 5 seconds, notify the user
-  if (!isGoodPosture && postureDuration > 50) {
-    notifyUser();
-  }
+
+  useEffect(()=>{
+    if (!isGoodPosture && postureDuration > 50) {
+      notifyUser();
+    }
+  },[isGoodPosture, postureDuration,notifyUser])
 
   return (
     <div
