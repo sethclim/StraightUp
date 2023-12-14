@@ -31,7 +31,7 @@ const Stopwatch = () => {
     >
       <span
         className={styles.label}
-      >{`Angle: ${neckInclination} ${postureType} Posture Time: ${formattedDuration}`}</span>
+      >{`Angle: ${neckInclination.toFixed(2)} ${postureType} Posture Time: ${formattedDuration}`}</span>
     </div>
   );
 };
