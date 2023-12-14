@@ -12,6 +12,8 @@ const Stopwatch = () => {
   const postureType = isGoodPosture ? "Good" : "Bad";
   const formattedDuration = formatPostureDuration(postureDuration);
 
+  const neckInclination = useStore((state) => state.neckInclination);
+
   // If bad posture exceeds 5 seconds, notify the user
 
   useEffect(()=>{
@@ -29,7 +31,7 @@ const Stopwatch = () => {
     >
       <span
         className={styles.label}
-      >{`${postureType} Posture Time: ${formattedDuration}`}</span>
+      >{`Angle: ${neckInclination} ${postureType} Posture Time: ${formattedDuration}`}</span>
     </div>
   );
 };
